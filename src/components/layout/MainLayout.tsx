@@ -5,30 +5,34 @@ import {
   VideoCameraOutlined,
 } from "@ant-design/icons";
 import { Layout, Menu, MenuProps, theme } from "antd";
-import { Outlet } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 
 const { Header, Content, Footer, Sider } = Layout;
 
 const items: MenuProps["items"] = [
   {
-    key: "dsf51546",
-    label: "Dashboard",
+    key: "dashboard",
+    label: <NavLink to={`/admin/dashboard`}>Dashboard</NavLink>,
   },
   {
     key: "dsf4ads546",
     label: "Profile",
   },
   {
-    key: "dsf5489ads46",
+    key: "User Management",
     label: "User Management",
     children: [
       {
-        key: "dsf5sa46",
-        label: "Create Admin",
+        key: "Create Admin",
+        label: <NavLink to={`/admin/create-admin`}>Create Admin</NavLink>,
       },
       {
-        key: "dsfads4ads546",
-        label: "Create Student",
+        key: "Create Faculty",
+        label: <NavLink to={`/admin/create-faculty`}>Create Faculty</NavLink>,
+      },
+      {
+        key: "Create Student",
+        label: <NavLink to={`/admin/create-student`}>Create Student</NavLink>,
       },
     ],
   },
