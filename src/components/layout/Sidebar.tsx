@@ -13,7 +13,7 @@ export default function Sidebar() {
     STUDENT: "student",
   };
   let sidebarItems;
-  const role = "student";
+  const role = "admin";
   switch (role) {
     case userRole.ADMIN:
       sidebarItems = sidebarItemsGenerator(adminPaths, userRole.ADMIN);
