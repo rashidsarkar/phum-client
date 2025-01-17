@@ -12,8 +12,9 @@ const root = ReactDOM.createRoot(document.getElementById("app")!);
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}></PersistGate>
-      <RouterProvider router={router}></RouterProvider>
+      <PersistGate loading={null} persistor={persistor}>
+        <RouterProvider router={router}></RouterProvider>
+      </PersistGate>
     </Provider>
   </React.StrictMode>
 );
