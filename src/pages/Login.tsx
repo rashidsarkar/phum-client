@@ -1,4 +1,4 @@
-import { Button } from "antd";
+import { Button, Row } from "antd";
 import React from "react";
 import { FieldValues, useForm, useFormContext } from "react-hook-form";
 import { useLoginMutation } from "../redux/features/auth/authApi";
@@ -25,35 +25,35 @@ export default function Login() {
   const onSubmit = async (data: FieldValues) => {
     console.log(data);
 
-    // const toastID = toast.loading("Logging In");
-    // try {
-    //   const userInfo = {
-    //     id: data.userId,
-    //     password: data.password,
-    //   };
-    //   const res = await login(userInfo).unwrap();
-    //   const user = verifyToken(res.data.accessToken) as TUser;
-    //   // console.log("userdataToken", user);
-    //   dispatch(setUser({ user: user, token: res.data.accessToken }));
-    //   toast.success("Login Success", { id: toastID, duration: 2000 });
-    //   navigate(`/${user.role}/dashboard`);
-    // } catch (error) {
-    //   toast.error("Invalid Credentials", { id: toastID, duration: 2000 });
-    // }
+    const toastID = toast.loading("Logging In");
+    try {
+      const userInfo = {
+        id: data.userId,
+        password: data.password,
+      };
+      const res = await login(userInfo).unwrap();
+      const user = verifyToken(res.data.accessToken) as TUser;
+      // console.log("userdataToken", user);
+      dispatch(setUser({ user: user, token: res.data.accessToken }));
+      toast.success("Login Success", { id: toastID, duration: 2000 });
+      navigate(`/${user.role}/dashboard`);
+    } catch (error) {
+      toast.error("Invalid Credentials", { id: toastID, duration: 2000 });
+    }
   };
   return (
-    <PHFroom onSubmit={onSubmit}>
-      <div>
+    <Row justify="center" align={"middle"} style={{ height: "100vh" }}>
+      <PHFroom onSubmit={onSubmit}>
         {/* <label htmlFor="id">ID:</label> */}
         {/* <input type="text" id="id" {...register("userId")} /> */}
-        <PHInput name={"id"} type={"text"} label={"ID"} />
-      </div>
-      <div>
+        <PHInput name={"userId"} type={"text"} label={"ID"} />
+
         {/* <label htmlFor="password">Password:</label> */}
         {/* <input type="password" id="password" {...register("password")} /> */}
         <PHInput name={"password"} type={"text"} label={"Password"} />
-      </div>
-      <Button htmlType="submit">Login</Button>
-    </PHFroom>
+
+        <Button htmlType="submit">Login</Button>
+      </PHFroom>
+    </Row>
   );
 }
