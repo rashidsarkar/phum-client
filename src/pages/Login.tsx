@@ -22,6 +22,11 @@ export default function Login() {
   //     password: "admin123",
   //   },
   // });
+  const defaultValues = {
+    userId: "A-0001",
+    password: "admin123",
+  };
+
   const onSubmit = async (data: FieldValues) => {
     console.log(data);
 
@@ -43,7 +48,7 @@ export default function Login() {
   };
   return (
     <Row justify="center" align={"middle"} style={{ height: "100vh" }}>
-      <PHFroom onSubmit={onSubmit}>
+      <PHFroom onSubmit={onSubmit} defaultValues={defaultValues}>
         {/* <label htmlFor="id">ID:</label> */}
         {/* <input type="text" id="id" {...register("userId")} /> */}
         <PHInput name={"userId"} type={"text"} label={"ID"} />
