@@ -2,6 +2,10 @@ import PHFroom from "../../../components/form/PHFroom";
 import { FieldValues, SubmitErrorHandler } from "react-hook-form";
 import { Button, Col, Flex } from "antd";
 import PHSelect from "../../../components/form/PHSelect";
+import { monthOptions } from "../../../constants/global";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { academicSemesterSchema } from "../../../schemas/academicManagement.schema";
 
 const nameOptions = [
   {
@@ -26,7 +30,7 @@ const yearOption = [0, 1, 2, 3, 4].map((num) => ({
 
 export default function CreateAcademicSemester() {
   const onSubmit: SubmitErrorHandler<FieldValues> = (data) => {
-    const name = nameOptions[Number(data?.name) - 1].label;
+    const name = nameOptions[Number(data?.name) - 1]?.label;
     const semesterData = {
       name: name,
       code: data.name,
@@ -40,18 +44,21 @@ export default function CreateAcademicSemester() {
   return (
     <Flex justify="center" align={"center"}>
       <Col span={6}>
-        <PHFroom onSubmit={onSubmit}>
+        <PHFroom
+          onSubmit={onSubmit}
+          resolver={zodResolver(academicSemesterSchema)}
+        >
           <PHSelect label={"Name"} name={"name"} options={nameOptions} />
           <PHSelect label={"Year"} name={"year"} options={yearOption} />
           <PHSelect
             label={"Start Month"}
             name={"startMonth"}
-            options={nameOptions}
+            options={monthOptions}
           />
           <PHSelect
             label={"End Month"}
             name={"endMonth"}
-            options={nameOptions}
+            options={monthOptions}
           />
           <Button htmlType="submit">Submit</Button>
         </PHFroom>

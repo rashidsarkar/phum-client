@@ -9,6 +9,7 @@ import {
 
 type TFromConfig = {
   defaultValues?: Record<string, any>;
+  resolver?: any;
 };
 type TFormProps = {
   onSubmit: SubmitHandler<FieldValues>;
@@ -18,11 +19,16 @@ export default function PHFroom({
   onSubmit,
   children,
   defaultValues,
+  resolver,
 }: TFormProps) {
   const fromConfig: TFromConfig = {};
   if (defaultValues) {
     fromConfig["defaultValues"] = defaultValues;
   }
+  if(resolver){
+    fromConfig["resolver"] = resolver;
+  }
+
   const methods = useForm(fromConfig);
   return (
     <FormProvider {...methods}>
