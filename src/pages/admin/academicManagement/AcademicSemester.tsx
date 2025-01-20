@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Table } from "antd";
 import type { TableColumnsType, TableProps } from "antd";
 
@@ -11,10 +11,12 @@ export type TTableData = Pick<
 >;
 
 export default function AcademicSemester() {
-  const { data: semesterData } = useGetAllSemestersQuery([
-    { name: "year", value: "2025" },
-  ]);
-  console.log(semesterData);
+  const [params, setParams] = useState([]);
+  // const { data: semesterData } = useGetAllSemestersQuery([
+  //   { name: "year", value: "2025" },
+  // ]);
+  const { data: semesterData } = useGetAllSemestersQuery(params);
+  // console.log(semesterData);
   const tableData = semesterData?.data?.map(
     ({ _id, name, startMonth, endMonth, year }) => {
       return {
@@ -29,30 +31,21 @@ export default function AcademicSemester() {
   const columns: TableColumnsType<TTableData> = [
     {
       title: "Name",
+      key: "name",
       dataIndex: "name",
       showSorterTooltip: { target: "full-header" },
       filters: [
         {
-          text: "Joe",
-          value: "Joe",
+          text: "Autumn",
+          value: "Autumn",
         },
         {
-          text: "Jim",
-          value: "Jim",
+          text: "Fall",
+          value: "Fall",
         },
         {
-          text: "Submenu",
-          value: "Submenu",
-          children: [
-            {
-              text: "Green",
-              value: "Green",
-            },
-            {
-              text: "Black",
-              value: "Black",
-            },
-          ],
+          text: "Summer",
+          value: "Summer",
         },
       ],
       // specify the condition of filtering result
@@ -60,14 +53,31 @@ export default function AcademicSemester() {
     },
     {
       title: "Year",
+      key: "year",
       dataIndex: "year",
+      filters: [
+        {
+          text: "2025",
+          value: "2025",
+        },
+        {
+          text: "2026",
+          value: "2026",
+        },
+        {
+          text: "2027",
+          value: "2027",
+        },
+      ],
     },
     {
       title: "Start Month",
+      key: "startMonth",
       dataIndex: "startMonth",
     },
     {
       title: "End Month",
+      key: "endMonth",
       dataIndex: "endMonth",
     },
   ];
@@ -105,7 +115,17 @@ export default function AcademicSemester() {
     sorter,
     extra
   ) => {
-    console.log("params", pagination, filters, sorter, extra);
+    console.log({ filters, extra });
+    if (extra.action === "filter") {
+      const queryParams = [];
+      filters.name?.forEach((item) => {
+        return queryParams.push({ name: "name", value: item });
+      });
+      filters.year?.forEach((item) => {
+        return queryParams.push({ name: "year", value: item });
+      });
+      setParams(queryParams);
+    }
   };
 
   return (
