@@ -1,9 +1,10 @@
-import React, { useState } from "react";
-import { Table } from "antd";
+import { useState } from "react";
+import { Button, Table } from "antd";
 import type { TableColumnsType, TableProps } from "antd";
 
 import { useGetAllSemestersQuery } from "../../../redux/features/admin/academicManagement.api";
 import { TAcademecSemester } from "../../../types/academicManagment.type";
+import { TQueryParam } from "../../../types";
 
 export type TTableData = Pick<
   TAcademecSemester,
@@ -11,11 +12,11 @@ export type TTableData = Pick<
 >;
 
 export default function AcademicSemester() {
-  const [params, setParams] = useState([]);
+  const [params, setParams] = useState<TQueryParam[] | undefined>([]);
   // const { data: semesterData } = useGetAllSemestersQuery([
   //   { name: "year", value: "2025" },
   // ]);
-  const { data: semesterData } = useGetAllSemestersQuery(params);
+  const { data: semesterData, isFetching } = useGetAllSemestersQuery(params);
   // console.log(semesterData);
   const tableData = semesterData?.data?.map(
     ({ _id, name, startMonth, endMonth, year }) => {
@@ -80,6 +81,17 @@ export default function AcademicSemester() {
       key: "endMonth",
       dataIndex: "endMonth",
     },
+    {
+      title: "Action",
+      key: "x",
+      render: () => {
+        return (
+          <div>
+            <Button>Update</Button>
+          </div>
+        );
+      },
+    },
   ];
 
   // const data = [
@@ -110,14 +122,14 @@ export default function AcademicSemester() {
   // ];
 
   const onChange: TableProps<TTableData>["onChange"] = (
-    pagination,
+    _pagination,
     filters,
-    sorter,
+    _sorter,
     extra
   ) => {
     console.log({ filters, extra });
     if (extra.action === "filter") {
-      const queryParams = [];
+      const queryParams: TQueryParam[] = [];
       filters.name?.forEach((item) => {
         return queryParams.push({ name: "name", value: item });
       });
@@ -127,7 +139,9 @@ export default function AcademicSemester() {
       setParams(queryParams);
     }
   };
-
+  // if (isLoading) {
+  //   return <p>Loading...</p>;
+  // }
   return (
     <div>
       <Table<TTableData>
@@ -135,6 +149,7 @@ export default function AcademicSemester() {
         dataSource={tableData}
         onChange={onChange}
         showSorterTooltip={{ target: "sorter-icon" }}
+        loading={isFetching}
       />
     </div>
   );
