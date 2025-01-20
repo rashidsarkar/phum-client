@@ -8,6 +8,7 @@ import { z } from "zod";
 import { academicSemesterSchema } from "../../../schemas/academicManagement.schema";
 import { useAddAcademicSemesterMutation } from "../../../redux/features/admin/academicManagement.api";
 import { toast } from "sonner";
+import { TResponse } from "../../../types/global";
 
 const nameOptions = [
   {
@@ -33,6 +34,7 @@ const yearOption = [0, 1, 2, 3, 4].map((num) => ({
 export default function CreateAcademicSemester() {
   const [addAcademicSemester] = useAddAcademicSemesterMutation();
   const onSubmit: SubmitErrorHandler<FieldValues> = async (data) => {
+    let toastID = toast.loading("Creating Academic Semester");
     const name = nameOptions[Number(data?.name) - 1]?.label;
     const semesterData = {
       name: name,
@@ -43,11 +45,16 @@ export default function CreateAcademicSemester() {
     };
 
     try {
-      const res = await addAcademicSemester(semesterData).unwrap();
+      const res = (await addAcademicSemester(semesterData)) as TResponse;
+      if (res.error) {
+        toast.error(res.error.data.message, { id: toastID });
+      } else {
+        toast.success("Academic Semester Create Successfully", { id: toastID });
+      }
       console.log(res);
     } catch (error) {
       console.log(error);
-      toast.error(`${error?.message}`);
+      toast.error("Error Creating Academic Semester", { id: toastID });
     }
   };
 
