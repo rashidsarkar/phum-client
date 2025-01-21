@@ -66,7 +66,7 @@ export default function AcademicDepartment() {
           className="stylish-font"
           style={{ textAlign: "center", marginBottom: "30px" }}
         >
-          All Academic Faculty
+          All Academic Department
         </h1>
         <Flex align="center" justify="center">
           <Col span={12}>
