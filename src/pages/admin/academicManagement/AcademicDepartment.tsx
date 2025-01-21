@@ -59,6 +59,7 @@ export default function AcademicDepartment() {
     }
   );
   console.log(tableData);
+
   return (
     <>
       <div>
