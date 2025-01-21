@@ -10,7 +10,7 @@ interface DataType {
   age: number;
   address: string;
 }
-console.log("sda");
+
 export default function AcademicDepartment() {
   const { data: depertmentData, isFetching } =
     useGetAllAcademicDepertmentQuery(undefined);
@@ -58,7 +58,7 @@ export default function AcademicDepartment() {
       };
     }
   );
-  console.log(tableData);
+
   return (
     <>
       <div>

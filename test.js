@@ -25,6 +25,7 @@ export const adminPaths2 = [
     ],
   },
 ];
+console.log("module 30 start ");
 // {
 //   key: "dashboard",
 //   label: <NavLink to={`/admin/dashboard`}>Dashboard</NavLink>,
