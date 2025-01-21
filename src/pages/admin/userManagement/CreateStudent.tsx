@@ -7,6 +7,8 @@ import PHSelect from "../../../components/form/PHSelect";
 import { bloodGroupOptions, genderOptions } from "../../../constants/global";
 import PHDatePicker from "../../../components/form/PHDatePicker";
 import { useGetAllSemestersQuery } from "../../../redux/features/admin/academicManagement.api";
+import { useGetAllAcademicDepertmentQuery } from "../../../redux/features/admin/academicDepertment.api";
+import { useAddStudentMutation } from "../../../redux/features/admin/userManagement.api";
 
 const studentDummyData = {
   password: "student123",
@@ -73,13 +75,21 @@ const studentDefaultValues = {
     contactNo: "777-888-9999",
     address: "789 Pine St, Villageton",
   },
-  admissionSemester: "65b0104110b74fcbd7a25d92",
-  academicDepartment: "65b00fb010b74fcbd7a25d8e",
 };
 
 export default function CreateStudent() {
+  const [addStudent, { data, error }] = useAddStudentMutation();
+  console.log({ data, error });
   const { data: semesterData, isLoading: sIsLoading } =
     useGetAllSemestersQuery(undefined);
+  const { data: departmentData, isLoading: dIsLoading } =
+    useGetAllAcademicDepertmentQuery(undefined);
+  const departmentOptions = departmentData?.data?.map((item) => {
+    return {
+      value: item._id,
+      label: item.name,
+    };
+  });
 
   const semesterOptions = semesterData?.data?.map((item) => {
     return {
@@ -87,11 +97,17 @@ export default function CreateStudent() {
       label: `${item.name} ${item.year}`,
     };
   });
-  console.log(semesterData);
+
   const onSubmit: SubmitHandler<FieldValues> = (data) => {
     console.log(data);
-    // const formData = new FormData();
-    // formData.append("data", JSON.stringify(data));
+    const formData = new FormData();
+    const studentData = {
+      password: "student123",
+      student: data,
+    };
+    formData.append("data", JSON.stringify(studentData));
+
+    addStudent(formData);
     // console.log(Object.fromEntries(formData));
   };
   return (
@@ -231,11 +247,12 @@ export default function CreateStudent() {
               />
             </Col>
             <Col span={24} lg={{ span: 8 }} md={{ span: 12 }}>
-              {/* <PHSelect
-                  name="academicDepartment"
-                  label="Academic Department"
-                  options={}
-                /> */}
+              <PHSelect
+                name="academicDepartment"
+                label="Academic Department"
+                options={departmentOptions}
+                disabled={dIsLoading}
+              />
             </Col>
           </Row>
           <Button htmlType="submit">Submit</Button>
