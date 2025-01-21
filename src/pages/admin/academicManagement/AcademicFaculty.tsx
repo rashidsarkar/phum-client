@@ -1,64 +1,44 @@
-import { Table, TableColumnsType, TableProps } from "antd";
 import React from "react";
+import { Button, Col, Flex, Table } from "antd";
+import type { TableColumnsType, TableProps } from "antd";
 import { useGetAllAcademicFacultyQuery } from "../../../redux/features/admin/academicFaculty.api";
-
 interface DataType {
+  key: React.Key;
   name: string;
-  age: number;
-  address: string;
 }
 
-const data = [
-  {
-    key: "1",
-    name: "John Brown",
-    age: 32,
-    address: "New York No. 1 Lake Park",
-  },
-  {
-    key: "2",
-    name: "Jim Green",
-    age: 42,
-    address: "London No. 1 Lake Park",
-  },
-  {
-    key: "3",
-    name: "Joe Black",
-    age: 32,
-    address: "Sydney No. 1 Lake Park",
-  },
-  {
-    key: "4",
-    name: "Jim Red",
-    age: 32,
-    address: "London No. 2 Lake Park",
-  },
-];
-
-export default function AcademicFaculty() {
+const AcademicFaculty = () => {
   const { data: facultyData, isFetching } =
     useGetAllAcademicFacultyQuery(undefined);
-  const tableData = facultyData.data.map(({ _id, name }) => {
-    return {
-      _id,
-      name,
-    };
-  });
   const columns: TableColumnsType<DataType> = [
     {
       title: "Name",
       dataIndex: "name",
-      showSorterTooltip: { target: "full-header" },
       filters: [
         {
-          text: "Joe",
-          value: "Joe",
+          text: "London",
+          value: "London",
         },
       ],
+      onFilter: (value, record) => record.name.startsWith(value as string),
+      filterSearch: true,
+      width: "50%",
+    },
+
+    {
+      title: "Action",
+      key: "x",
+      align: "right",
+      render: () => {
+        return (
+          <div>
+            <Button>Update</Button>
+          </div>
+        );
+      },
     },
   ];
 
-  console.log(data);
   const onChange: TableProps<DataType>["onChange"] = (
     pagination,
     filters,
@@ -67,15 +47,39 @@ export default function AcademicFaculty() {
   ) => {
     console.log("params", pagination, filters, sorter, extra);
   };
+
+  // console.log(facultyData.data);
+  // if (isFetching) {
+  //   return <div>Loading...</div>;
+  // }
+
+  const tableData = facultyData?.data?.map(({ _id, name }) => {
+    return {
+      key: _id,
+      name: name,
+    };
+  });
+  console.log(tableData);
   return (
     <div>
-      <Table<DataType>
-        columns={columns}
-        dataSource={tableData}
-        onChange={onChange}
-        showSorterTooltip={{ target: "sorter-icon" }}
-        loading={isFetching}
-      />
+      <h1
+        className="stylish-font"
+        style={{ textAlign: "center", marginBottom: "30px" }}
+      >
+        All Academic Faculty
+      </h1>
+      <Flex align="center" justify="center">
+        <Col span={12}>
+          <Table<DataType>
+            columns={columns}
+            dataSource={tableData}
+            loading={isFetching}
+            onChange={onChange}
+          />
+        </Col>
+      </Flex>
     </div>
   );
-}
+};
+
+export default AcademicFaculty;

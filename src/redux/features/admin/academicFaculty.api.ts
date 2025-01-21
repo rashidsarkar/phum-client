@@ -8,6 +8,7 @@ const academicFacultyApi = baseApi.injectEndpoints({
         method: "POST",
         body: data,
       }),
+      invalidatesTags: ["faculty"],
     }),
     getAllAcademicFaculty: builder.query({
       query: () => {
@@ -16,8 +17,10 @@ const academicFacultyApi = baseApi.injectEndpoints({
           method: "GET",
         };
       },
+      providesTags: ["faculty"],
     }),
   }),
 });
 
-export const { useAddAcademicFacultyMutation,useGetAllAcademicFacultyQuery } = academicFacultyApi;
+export const { useAddAcademicFacultyMutation, useGetAllAcademicFacultyQuery } =
+  academicFacultyApi;
