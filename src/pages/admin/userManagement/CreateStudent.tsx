@@ -108,7 +108,7 @@ export default function CreateStudent() {
     formData.append("data", JSON.stringify(studentData));
 
     addStudent(formData);
-    // console.log(Object.fromEntries(formData));
+    console.log(Object.fromEntries(formData));
   };
   return (
     <Row>
