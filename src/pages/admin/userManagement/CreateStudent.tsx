@@ -9,6 +9,7 @@ import PHDatePicker from "../../../components/form/PHDatePicker";
 import { useGetAllSemestersQuery } from "../../../redux/features/admin/academicManagement.api";
 import { useGetAllAcademicDepertmentQuery } from "../../../redux/features/admin/academicDepertment.api";
 import { useAddStudentMutation } from "../../../redux/features/admin/userManagement.api";
+import { toast } from "sonner";
 
 const studentDummyData = {
   password: "student123",
@@ -55,7 +56,6 @@ const studentDefaultValues = {
   },
   gender: "male",
 
-  email: "student2@gmail.com",
   contactNo: "1235678",
   emergencyContactNo: "987-654-3210",
   bloogGroup: "A+",
@@ -98,7 +98,8 @@ export default function CreateStudent() {
     };
   });
 
-  const onSubmit: SubmitHandler<FieldValues> = (data) => {
+  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+    const toastID = toast.loading(" Creating Student...");
     console.log(data);
     const formData = new FormData();
     const studentData = {
@@ -107,7 +108,15 @@ export default function CreateStudent() {
     };
     formData.append("data", JSON.stringify(studentData));
     formData.append("file", data.image);
-    // addStudent(formData);
+    const res = await addStudent(formData);
+    if (res.error) {
+      // toast.error("Error creating student", toastID);
+      // toast.error(res.error.message);
+      toast.error(res.error?.data?.message, { id: toastID });
+    } else {
+      toast.success("Student created successfully", { id: toastID });
+    }
+    console.log(res);
     // console.log(Object.fromEntries(formData));
   };
   return (
