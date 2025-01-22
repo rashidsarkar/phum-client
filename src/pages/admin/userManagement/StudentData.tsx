@@ -5,8 +5,12 @@ import type { TableColumnsType, TableProps } from "antd";
 import { TQueryParam } from "../../../types";
 import { useGetAllStudentsQuery } from "../../../redux/features/admin/userManagement.api";
 import { TStudent } from "../../../types/userManagement.type";
+import { Link } from "react-router-dom";
 
-export type TTableData = Pick<TStudent, "fullName" | "id">;
+export type TTableData = Pick<
+  TStudent,
+  "fullName" | "id" | "email" | "contactNo"
+>;
 
 export default function StudentData() {
   const [params, setParams] = useState<TQueryParam[]>([]);
@@ -15,19 +19,23 @@ export default function StudentData() {
   //   { name: "year", value: "2025" },
   // ]);
   const { data: studentData, isFetching } = useGetAllStudentsQuery([
-    { name: "limit", value: 1 },
+    // { name: "limit", value: 1 },
     { name: "page", value: page },
     { name: "sort", value: "-id" },
     ...params,
   ]);
   const metaData = studentData?.meta;
-  const tableData = studentData?.data?.map(({ _id, fullName, id }) => {
-    return {
-      key: _id,
-      fullName: fullName,
-      id,
-    };
-  });
+  const tableData = studentData?.data?.map(
+    ({ _id, fullName, id, email, contactNo }) => {
+      return {
+        key: _id,
+        fullName: fullName,
+        id,
+        contactNo,
+        email,
+      };
+    }
+  );
   const columns: TableColumnsType<TTableData> = [
     {
       title: "Name",
@@ -43,14 +51,27 @@ export default function StudentData() {
       key: "id",
       dataIndex: "id",
     },
+    {
+      title: "Email",
+      key: "email",
+      dataIndex: "email",
+    },
+    {
+      title: "Contact No",
+      key: "contactNo",
+      dataIndex: "contactNo",
+    },
 
     {
       title: "Action",
       key: "x",
-      render: () => {
+      render: (item) => {
+        console.log(item);
         return (
           <Space>
-            <Button>Details</Button>
+            <Link to={`/admin/Students-data/${item.key}`}>
+              <Button>Details</Button>
+            </Link>
             <Button>Update</Button>
             <Button>Block</Button>
           </Space>
